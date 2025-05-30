@@ -1,0 +1,5 @@
+spring.security.oauth2.client.registration.google.client-id=https://console.cloud.google.com/auth/clients/
+spring.security.oauth2.client.registration.google.client-secret=
+
+spring.security.oauth2.client.registration.github.client-id=https://github.com/settings/developers
+spring.security.oauth2.client.registration.github.client-secret=
