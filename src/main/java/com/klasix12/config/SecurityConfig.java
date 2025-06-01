@@ -11,11 +11,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // CommonOAuth2Provider можно посмотреть дефолтных провайдеров авторизации
         http.oauth2Login(Customizer.withDefaults());
 
         http.authorizeHttpRequests(c -> c.anyRequest().authenticated());
-
         return http.build();
     }
 }
