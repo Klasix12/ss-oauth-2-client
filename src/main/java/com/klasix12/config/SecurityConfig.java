@@ -1,13 +1,24 @@
 package com.klasix12.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
+
+    @Value("${client-id}")
+    private String clientId;
+
+    @Value("${client-secret}")
+    private String clientSecret;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -15,5 +26,21 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(c -> c.anyRequest().authenticated());
         return http.build();
+    }
+
+    @Bean
+    public ClientRegistrationRepository clientRegistrationRepository() {
+        return new InMemoryClientRegistrationRepository(this.googleClientRegistration());
+    }
+
+    /*
+    Подсос с конфига это временное решение, так он должен дергать данные из бд, иначе нет смысла делать так, если все
+    равно придется пересобирать приложение после изменения конфигурации
+     */
+    private ClientRegistration googleClientRegistration() {
+        return CommonOAuth2Provider.GOOGLE.getBuilder("google")
+                .clientId(clientId)
+                .clientSecret(clientSecret)
+                .build();
     }
 }
